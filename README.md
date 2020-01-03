@@ -1,3 +1,34 @@
+## Run demo
+
+Go to the `model/` directory and unzip the file `model.zip` (pre-trained on the IAM dataset).
+Take care that the unzipped files are placed directly into the `model/` directory and not some subdirectory created by the unzip-program.
+Afterwards, go to the `src/` directory and run `python main.py`.
+The input image and the expected output is shown below.
+
+![test](./data/test.png)
+
+```
+> python main.py
+Validation character error rate of saved model: 10.624916%
+Init with stored values from ../model/snapshot-38
+Recognized: "little"
+Probability: 0.96625507
+```
+
+
+
+## Command line arguments
+
+* `--train`: train the NN, details see below.
+* `--validate`: validate the NN, details see below.
+* `--beamsearch`: use vanilla beam search decoding (better, but slower) instead of best path decoding.
+* `--wordbeamsearch`: use word beam search decoding (only outputs words contained in a dictionary) instead of best path decoding. This is a custom TF operation and must be compiled from source, more information see corresponding section below. It should **not** be used when training the NN.
+* `--dump`: dumps the output of the NN to CSV file(s) saved in the `dump/` folder. Can be used as input for the [CTCDecoder](https://github.com/githubharald/CTCDecoder).
+
+If neither `--train` nor `--validate` is specified, the NN infers the text from the test image (`data/test.png`).
+Two examples: if you want to infer using beam search, execute `python main.py --beamsearch`, while you have to execute `python main.py --train --beamsearch` if you want to train the NN and do the validation using beam search.
+
+
 ## Train model 
 
 ### IAM dataset
